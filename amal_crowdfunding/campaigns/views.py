@@ -1,33 +1,55 @@
-# campaigns/views.py
-from rest_framework import viewsets, permissions
-from rest_framework.pagination import PageNumberPagination
-from .models import Campaign
-from .serializers import CampaignSerializer
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status, generics
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny
+from rest_framework.exceptions import PermissionDenied
+from .models import Category, Campaign, Comment
+from .serializers import CategorySerializer, CampaignSerializer, CommentSerializer
+from django.db.models import Q
 
-class IsOwnerOrReadOnly(permissions.BasePermission):
-    def has_object_permission(self, request, view, obj):
-        if request.method in permissions.SAFE_METHODS:
-            return True
-        return obj.creator == request.user
+class CategoryListView(generics.ListAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    permission_classes = [AllowAny]  # Allow unauthenticated access
 
-class StandardPagination(PageNumberPagination):
-    page_size = 10
-
-class CampaignViewSet(viewsets.ModelViewSet):
-    queryset = Campaign.objects.all().order_by('-created_at')
+class CampaignListCreateView(generics.ListCreateAPIView):
     serializer_class = CampaignSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
-    pagination_class = StandardPagination
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        queryset = Campaign.objects.all()
+        search = self.request.query_params.get('search', None)
+        category = self.request.query_params.get('category', None)
+        if search:
+            queryset = queryset.filter(Q(title__icontains=search) | Q(description__icontains=search))
+        if category:
+            queryset = queryset.filter(category_id=category)
+        return queryset
 
     def perform_create(self, serializer):
         serializer.save(creator=self.request.user)
 
+class CampaignDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Campaign.objects.all()
+    serializer_class = CampaignSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def perform_destroy(self, instance):
+        if instance.creator == self.request.user:
+            instance.delete()
+        else:
+            raise PermissionDenied("Only the creator can delete this campaign.")
+
+class CommentListCreateView(generics.ListCreateAPIView):
+    serializer_class = CommentSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
     def get_queryset(self):
-        queryset = super().get_queryset()
-        search = self.request.query_params.get('search', None)
-        category_id = self.request.query_params.get('category', None)
-        if search:
-            queryset = queryset.filter(title__icontains=search) | queryset.filter(description__icontains=search)
-        if category_id:
-            queryset = queryset.filter(category__id=category_id)
-        return queryset
+        campaign_id = self.request.query_params.get('campaign', None)
+        if campaign_id:
+            return Comment.objects.filter(campaign_id=campaign_id)
+        return Comment.objects.all()
+
+    def perform_create(self, serializer):
+        campaign_id = self.request.data.get('campaign')
+        serializer.save(user=self.request.user, campaign_id=campaign_id)

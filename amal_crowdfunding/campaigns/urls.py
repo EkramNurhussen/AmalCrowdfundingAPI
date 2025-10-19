@@ -1,11 +1,9 @@
-# campaigns/urls.py
-from django.urls import path, include
-from rest_framework.routers import DefaultRouter
-from .views import CampaignViewSet
-
-router = DefaultRouter()
-router.register(r'campaigns', CampaignViewSet)
+from django.urls import path
+from .views import CategoryListView, CampaignListCreateView, CampaignDetailView, CommentListCreateView
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('categories/', CategoryListView.as_view(), name='category-list'),
+    path('campaigns/', CampaignListCreateView.as_view(), name='campaign-list-create'),
+    path('campaigns/<int:pk>/', CampaignDetailView.as_view(), name='campaign-detail'),
+    path('comments/', CommentListCreateView.as_view(), name='comment-list-create'),
 ]

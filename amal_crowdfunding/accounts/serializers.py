@@ -1,28 +1,29 @@
-# accounts/serializers.py
 from rest_framework import serializers
-from django.contrib.auth import get_user_model
-
-CustomUser = get_user_model()
+from django.contrib.auth.models import User
+from .models import Profile
 
 class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CustomUser
-        fields = ['id', 'username', 'email', 'is_creator', 'bio', 'profile_picture']
-        read_only_fields = ['id']
-
-class RegisterSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True)
+    is_creator = serializers.BooleanField(default=False)
 
     class Meta:
-        model = CustomUser
-        fields = ['username', 'email', 'password', 'is_creator', 'bio', 'profile_picture']
+        model = User
+        fields = ['username', 'email', 'password', 'is_creator']
+        extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
-        user = CustomUser.objects.create_user(
+        is_creator = validated_data.pop('is_creator', False)
+        user = User.objects.create_user(
             username=validated_data['username'],
             email=validated_data['email'],
-            password=validated_data['password'],
-            is_creator=validated_data.get('is_creator', False),
-            bio=validated_data.get('bio', ''),
+            password=validated_data['password']
         )
+        Profile.objects.create(user=user, is_creator=is_creator)
         return user
+
+class ProfileSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='user.username', read_only=True)
+    email = serializers.EmailField(source='user.email', read_only=True)
+
+    class Meta:
+        model = Profile
+        fields = ['username', 'email', 'bio', 'is_creator']

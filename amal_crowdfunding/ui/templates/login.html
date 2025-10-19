@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="bg-gray-800 text-white p-4">
+        <div class="container mx-auto flex justify-between">
+            <a href="/" class="text-xl font-bold">Amal Crowdfunding</a>
+            <div id="auth-links" class="flex space-x-4">
+                <a href="/login/" class="hover:underline">Login</a>
+                <a href="/register/" class="hover:underline">Register</a>
+            </div>
+            <div id="user-links" class="flex space-x-4 hidden">
+                <a href="/dashboard/" class="hover:underline">Dashboard</a>
+                <a href="/profile/" class="hover:underline">Profile</a>
+                <a href="/backer_history/" class="hover:underline">Backer History</a>
+                <button id="logout" class="hover:underline">Logout</button>
+            </div>
+        </div>
+    </nav>
+    <div class="container mx-auto p-4">
+        <h1 class="text-2xl font-bold mb-4">Login</h1>
+        <form id="login-form" class="space-y-4">
+            <div>
+                <label for="username" class="block">Username</label>
+                <input type="text" id="username" name="username" class="w-full border p-2" required>
+            </div>
+            <div>
+                <label for="password" class="block">Password</label>
+                <input type="password" id="password" name="password" class="w-full border p-2" required>
+            </div>
+            <button type="submit" class="bg-blue-500 text-white p-2 rounded">Login</button>
+        </form>
+    </div>
+    <script src="/static/script.js"></script>
+</body>
+</html>

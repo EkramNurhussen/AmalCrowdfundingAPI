@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amal Crowdfunding</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <nav class="bg-gray-800 p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="/" class="text-white text-lg font-bold">Amal Crowdfunding</a>
+            <div class="space-x-4">
+                <a href="/" class="text-gray-300 hover:text-white">Home</a>
+                <a href="/dashboard/" class="text-gray-300 hover:text-white">Campaigns</a>
+                <a href="/create_campaign/" class="text-gray-300 hover:text-white">Create Campaign</a>
+                <a href="/backer_history/" class="text-gray-300 hover:text-white">Backer History</a>
+                <span id="auth-links">
+                    <a href="/register/" class="text-gray-300 hover:text-white">Register</a>
+                    <a href="/login/" class="text-gray-300 hover:text-white">Login</a>
+                </span>
+                <span id="user-links" class="hidden">
+                    <a href="/profile/" class="text-gray-300 hover:text-white">Profile</a>
+                    <a href="#" id="logout" class="text-gray-300 hover:text-white">Logout</a>
+                </span>
+            </div>
+        </div>
+    </nav>
+</body>
+</html>

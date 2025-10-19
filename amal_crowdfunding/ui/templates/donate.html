@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donate</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    {% include 'nav.html' %}
+    <div class="container mx-auto p-4">
+        <h1 class="text-3xl font-bold mb-4">Donate to Campaign</h1>
+        <div id="campaign-details" class="mb-4"></div>
+        <form id="donate-form" class="max-w-md">
+            <div class="mb-4">
+                <label for="amount" class="block text-sm font-medium">Amount</label>
+                <input type="number" id="amount" name="amount" class="border p-2 rounded w-full" required>
+            </div>
+            <div class="mb-4">
+                <label for="anonymous" class="flex items-center">
+                    <input type="checkbox" id="anonymous" name="anonymous" class="mr-2">
+                    Donate Anonymously
+                </label>
+            </div>
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Donate</button>
+        </form>
+    </div>
+    <script src="/static/script.js"></script>
+</body>
+</html>

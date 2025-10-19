@@ -1,7 +1,5 @@
-# campaigns/serializers.py
 from rest_framework import serializers
-from .models import Campaign, Category
-from accounts.serializers import UserSerializer
+from .models import Category, Campaign, Comment
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -9,15 +7,18 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = ['id', 'name']
 
 class CampaignSerializer(serializers.ModelSerializer):
-    creator = UserSerializer(read_only=True)
-    category = CategorySerializer(read_only=True)
-    category_id = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), source='category', write_only=True)
     progress = serializers.SerializerMethodField()
 
     class Meta:
         model = Campaign
-        fields = ['id', 'title', 'description', 'goal_amount', 'current_amount', 'end_date', 'creator', 'category', 'category_id', 'image', 'created_at', 'updated_at', 'progress']
-        read_only_fields = ['creator', 'current_amount', 'created_at', 'updated_at']
+        fields = ['id', 'creator', 'title', 'description', 'goal_amount', 'current_amount', 'created_at', 'end_date', 'category', 'progress']
 
     def get_progress(self, obj):
         return (obj.current_amount / obj.goal_amount * 100) if obj.goal_amount > 0 else 0
+
+class CommentSerializer(serializers.ModelSerializer):
+    user = serializers.StringRelatedField()
+
+    class Meta:
+        model = Comment
+        fields = ['id', 'campaign', 'user', 'content', 'created_at']

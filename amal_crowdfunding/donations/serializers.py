@@ -1,14 +1,11 @@
-# donations/serializers.py
 from rest_framework import serializers
 from .models import Donation
-from accounts.serializers import UserSerializer
-from campaigns.serializers import CampaignSerializer
+from campaigns.models import Campaign
 
 class DonationSerializer(serializers.ModelSerializer):
-    donor = UserSerializer(read_only=True)
-    campaign = CampaignSerializer(read_only=True)
+    campaign = serializers.PrimaryKeyRelatedField(queryset=Campaign.objects.all())
 
     class Meta:
         model = Donation
-        fields = ['id', 'amount', 'anonymous', 'donor', 'campaign', 'created_at']
-        read_only_fields = ['donor', 'campaign', 'created_at']
+        fields = ['id', 'user', 'campaign', 'amount', 'anonymous', 'created_at']
+        read_only_fields = ['user', 'created_at']

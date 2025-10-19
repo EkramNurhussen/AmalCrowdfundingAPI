@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Campaign</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    {% include 'nav.html' %}
+    <div class="container mx-auto p-4">
+        <h1 class="text-3xl font-bold mb-4">Create a Campaign</h1>
+        <form id="create-campaign-form" class="max-w-md">
+            <div class="mb-4">
+                <label for="title" class="block text-sm font-medium">Title</label>
+                <input type="text" id="title" name="title" class="border p-2 rounded w-full" required>
+            </div>
+            <div class="mb-4">
+                <label for="description" class="block text-sm font-medium">Description</label>
+                <textarea id="description" name="description" class="border p-2 rounded w-full" required></textarea>
+            </div>
+            <div class="mb-4">
+                <label for="goal_amount" class="block text-sm font-medium">Goal Amount</label>
+                <input type="number" id="goal_amount" name="goal_amount" class="border p-2 rounded w-full" required>
+            </div>
+            <div class="mb-4">
+                <label for="end_date" class="block text-sm font-medium">End Date</label>
+                <input type="date" id="end_date" name="end_date" class="border p-2 rounded w-full" required>
+            </div>
+            <div class="mb-4">
+                <label for="category" class="block text-sm font-medium">Category</label>
+                <select id="category" name="category" class="border p-2 rounded w-full" required></select>
+            </div>
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Create Campaign</button>
+        </form>
+    </div>
+    <script src="/static/script.js"></script>
+</body>
+</html>
